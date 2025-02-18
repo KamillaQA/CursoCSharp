@@ -2,7 +2,7 @@
 
 class Podcast
 {
-    private List<Episodio> episodios = new List<Episodio>();
+    public List<Episodio> episodios = new List<Episodio>();
     public string Nome { get; }
     public string Host { get; }
     public TimeSpan Duracao { get; set; }
@@ -19,7 +19,6 @@ class Podcast
     {
         episodios.Add(episodio); // Agora acessa corretamente a lista privada
     }
-
     void ExibirDetalhes()
     {
         Console.Clear();
@@ -60,5 +59,8 @@ class Podcast
             ExibirOpcoesDoMenu();
         }
     }
+
+}
+
 
 }

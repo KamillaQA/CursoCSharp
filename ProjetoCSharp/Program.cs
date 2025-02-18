@@ -1,8 +1,234 @@
-﻿//using ProjetoCSharp.Modelos;
-
-//ProjetoCSharp.Modelos.Banda ira = new ProjetoCSharp.Modelos.Banda("Ira");
+﻿using ProjetoCSharp.Modelos;
 
 Console.WriteLine("Bem-vindo ao Sistema Musical!");
+
+Banda ira = new Banda("Ira!");
+ira.AdicionarNota(10);
+ira.AdicionarNota(8);
+Banda beatles = new("The Beatles");
+
+Dictionary<string, Banda> bandasRegistradas = new();
+bandasRegistradas.Add(ira.Nome, ira);
+bandasRegistradas.Add(beatles.Nome, beatles);
+void ExibirTituloDaOpcao(string titulo)
+{
+    int quantidadeDeLetras = titulo.Length;
+    string asteriscos = string.Empty.PadLeft(quantidadeDeLetras, '*');
+    Console.WriteLine(asteriscos);
+    Console.WriteLine(titulo);
+    Console.WriteLine(asteriscos + "\n");
+}
+
+void ExibirOpcoesDoMenu()
+{
+
+    Console.WriteLine("\nDigite 1 para registrar uma banda");
+    Console.WriteLine("Digite 2 para mostrar todas as bandas");
+    Console.WriteLine("Digite 3 para avaliar uma banda");
+    Console.WriteLine("Digite 4 para exibir a média de uma banda");
+    Console.WriteLine("Digite -1 para sair");
+
+    Console.Write("\nDigite a sua opção: ");
+    String opcaoEscolhida = Console.ReadLine()!;// o sinal ! é para que não seja aceito valor nulo
+    int opcaoEscolhidaNumerica = int.Parse(opcaoEscolhida);
+
+    switch (opcaoEscolhidaNumerica)
+    {
+        //case 1: Console.WriteLine("Você escolheu a opção " + opcaoEscolhidaNumerica);
+        case 1:
+            RegistrarBanda();
+            break;
+        case 2:
+            MostraBandasRegistradas();
+            break;
+        case 3:
+            AvaliarUmaBanda();
+            break;
+        case 4:
+            ExibirMediaBanda();
+            break;
+        case -1:
+            Console.WriteLine("Tchau, Tchau");
+            break;
+        default:
+            Console.WriteLine("Opção Invalída");
+            break;
+    }
+    /*if (opcaoEscolhidaNumerica == 1){
+        Console.Write("\nVocêdigitou a opção: "+ opcaoEscolhida);
+    } else if (opcaoEscolhidaNumerica == 2){
+        Console.Write("\nVocêdigitou a opção: "+ opcaoEscolhida);
+    }*/
+}
+
+void RegistrarBanda()
+{
+    Console.Clear();
+    Console.Write("Registro das bandas\n");
+    Console.Write("Digite o nome da banda que deseja registrar: ");
+    string nomeDaBanda = Console.ReadLine()!;
+    Banda banda = new Banda(nomeDaBanda);
+    bandasRegistradas.Add(nomeDaBanda, banda);
+    Console.WriteLine($"A banda {nomeDaBanda} foi registrada com sucesso!");
+    Thread.Sleep(4000);
+    Console.Clear();
+    ExibirOpcoesDoMenu();
+}
+void AvaliarUmaBanda()
+{
+    Console.Clear();
+    ExibirTituloDaOpcao("Avaliar Banda");
+    Console.Write("Digite o nome da banda que deseja avaliar: ");
+    string nomeDaBanda = Console.ReadLine()!;
+    if (bandasRegistradas.ContainsKey(nomeDaBanda))
+    {
+        Banda banda = bandasRegistradas[nomeDaBanda];
+        Console.Write($"Qual a nota que a banda {nomeDaBanda} merece: ");
+        int nota = int.Parse(Console.ReadLine()!);
+        if (int.TryParse(Console.ReadLine(), out int novaNota))
+        {
+            banda.AdicionarNota(nota);
+            Console.WriteLine($"\nA nota {nota} foi registrada com sucesso para a banda {nomeDaBanda}.");
+            Thread.Sleep(2000);
+        }
+        else
+        {
+            Console.WriteLine("\nEntrada inválida! Por favor, insira um número válido.");
+        }
+    }
+    else
+    {
+        Console.WriteLine($"\nA banda {nomeDaBanda} não foi encontrada!");
+    }
+
+    Console.WriteLine("\nDigite uma tecla para voltar ao menu principal.");
+    Console.ReadKey();
+    Console.Clear();
+    ExibirOpcoesDoMenu();
+}
+
+void MostraBandasRegistradas()
+{
+    Console.Clear();
+    ExibirTituloDaOpção("Exibindo todas as bandas registradas");
+    /* for (int i = 0; i < listaDasBandas.Count; i++){
+         Console.WriteLine($"Banda: {listaDasBandas[i]}");
+     }*/
+    foreach (string banda in bandasRegistradas.Keys)
+    {
+        Console.WriteLine($"Banda: {banda}");
+    }
+    Console.WriteLine("\nDigite uma tecla para voltar ao menu principal");
+    Console.ReadKey();
+    Console.Clear();
+    ExibirOpcoesDoMenu();
+}
+
+void ExibirTituloDaOpção(string titulo)
+{
+    int quantidadeDeLetras = titulo.Length;
+    string asteriscos = string.Empty.PadLeft(quantidadeDeLetras, '*');
+    Console.WriteLine(asteriscos);
+    Console.WriteLine(titulo);
+    Console.WriteLine(asteriscos + "\n");
+}
+
+void ExibirMediaBanda()
+{
+    Console.Clear();
+    ExibirTituloDaOpção("Exibir Média de Banda");
+    Console.Write("Digite o nome da Banda: ");
+    string nomeDaBanda = Console.ReadLine()!;
+
+    // Supondo que bandasRegistradas seja um Dictionary<string, Banda>
+    if (bandasRegistradas.ContainsKey(nomeDaBanda))
+    {
+        Banda banda = bandasRegistradas[nomeDaBanda]; // Aqui você obtém a instância da Banda
+        if (banda.Musicas.Count > 0) // Verifica se a banda tem músicas e, consequentemente, notas
+        {
+            // A média é calculada através da lista de notas da banda
+            double media = banda.Media;
+            Console.WriteLine($"A média de {nomeDaBanda} é {media:F2}.");
+        }
+        else
+        {
+            Console.WriteLine($"A banda {nomeDaBanda} ainda não possui músicas registradas.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Banda não encontrada.");
+    }
+    ExibirOpcoesDoMenu();
+}
+
+void RegistrarAlbum()
+{
+    Console.Clear();
+    ExibirTituloDaOpcao("Registro de álbuns");
+    Console.Write("Digite a banda cujo álbum deseja registrar: ");
+    string nomeDaBanda = Console.ReadLine()!;
+    if (bandasRegistradas.ContainsKey(nomeDaBanda))
+    {
+        Console.Write("Agora digite o título do álbum: ");
+        string tituloAlbum = Console.ReadLine()!;
+        Banda banda = bandasRegistradas[nomeDaBanda];
+        banda.AdicionarAlbum(new Album(tituloAlbum));
+        Console.WriteLine($"O álbum {tituloAlbum} de {nomeDaBanda} foi registrado com sucesso!");
+        Thread.Sleep(4000);
+        Console.Clear();
+    }
+    else
+    {
+        Console.WriteLine($"\nA banda {nomeDaBanda} não foi encontrada!");
+    }
+
+    ExibirOpcoesDoMenu();
+}
+
+void ExibirDetalhes()
+{
+    Console.Clear();
+    ExibirTituloDaOpcao("Exibir detalhes da banda");
+    Console.Write("Digite o nome da banda que deseja conhecer melhor: ");
+    string nomeDaBanda = Console.ReadLine()!;
+    if (bandasRegistradas.ContainsKey(nomeDaBanda))
+    {
+        Banda banda = bandasRegistradas[nomeDaBanda];
+
+        Console.WriteLine($"\nA média da banda {nomeDaBanda} é {banda.Media}.");
+
+        // Se a banda tem um podcast associado, exibir detalhes do podcast
+        if (banda.Podcast != null)
+        {
+            Console.WriteLine($"\nPodcast {banda.Podcast.Nome} apresentado por {banda.Podcast.Host} com duração de {banda.Podcast.Duracao} minutos.\n");
+
+            foreach (Episodio episodio in banda.Podcast.episodios.OrderBy(e => e.Ordem))
+            {
+                Console.WriteLine(episodio.Resumo);
+            }
+
+            Console.WriteLine($"\nTotal de episódios: {banda.Podcast.TotalEpisodios}.");
+        }
+
+        Console.WriteLine("\nDigite uma tecla para voltar ao menu principal");
+        Console.ReadKey();
+        Console.Clear();
+        ExibirOpcoesDoMenu();
+    }
+    else
+    {
+        Console.WriteLine("\nBanda não encontrada!");
+        Console.WriteLine("Pressione qualquer tecla para voltar ao menu.");
+        Console.ReadKey();
+        Console.Clear();
+        ExibirOpcoesDoMenu();
+    }
+}
+
+ExibirOpcoesDoMenu();
+
+
 
 // **Criando gêneros 
 GeneroMusical Gospel = new GeneroMusical("Cristão", "Gênero caracterizado por festa.");
@@ -103,7 +329,7 @@ Console.WriteLine(ep2.Resumo);
 Podcast podcast = new("Especial", "Daniel", TimeSpan.FromMinutes(12));
 podcast.AdicionarEpisodio(ep1);
 podcast.AdicionarEpisodio(ep2);
-podcast.ExibirDetalhes();
+ExibirDetalhes();
 
 // Exemplo de download manager
 DownloadManager downloadManager = new DownloadManager();
@@ -201,3 +427,4 @@ contaBancaria.Senha = "acesso";
 Console.WriteLine($"O nome do titular é: {contaBancaria.titular}");
 Console.WriteLine($"Seu saldo Bancário é: {contaBancaria.saldo}");
 */
+
